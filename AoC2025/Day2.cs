@@ -24,18 +24,27 @@ public class Day2
         for (long currentIndex = range.Item1; currentIndex <= range.Item2; currentIndex++)
         {
             string currentIDString = currentIndex.ToString();
-            
-            if (currentIDString.Length % 2 == 0)
+
+            if (IsInvalidForPart1(currentIDString))
             {
-                string substring = currentIDString.Substring(0, currentIDString.Length / 2);
-                int lastIndex = currentIDString.LastIndexOf(substring);
-                if (lastIndex == currentIDString.Length / 2)
-                {
-                    invalidIDs.Add(currentIndex);
-                }
+                invalidIDs.Add(currentIndex);
             }
         }  
         return invalidIDs;
+    }
+
+    private static bool IsInvalidForPart1(string currentIDString)
+    {
+        if (currentIDString.Length % 2 == 0)
+        {
+            string substring = currentIDString.Substring(0, currentIDString.Length / 2);
+            int lastIndex = currentIDString.LastIndexOf(substring);
+            if (lastIndex == currentIDString.Length / 2)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList GetInvalidIDsForRangePart2(RangeTuple range)
@@ -45,25 +54,47 @@ public class Day2
         {
             string currentIDString = currentIndex.ToString();
 
-            // Check substrings up to half the length of the string
-            for (int substringSize = 1; substringSize < currentIDString.Length / 2; ++substringSize)
+            if (IsInvalidIDPart2(currentIDString))
             {
-                
-            }
-            
-            if (currentIDString.Length % 2 == 0)
-            {
-                string substring = currentIDString.Substring(0, currentIDString.Length / 2);
-                int lastIndex = currentIDString.LastIndexOf(substring);
-                if (lastIndex == currentIDString.Length / 2)
-                {
-                    invalidIDs.Add(currentIndex);
-                }
+                invalidIDs.Add(currentIndex);
             }
         }  
         return invalidIDs;
     }
-    
+
+    public static bool IsInvalidIDPart2(string currentIDString)
+    {
+        // Check substrings up to half the length of the string
+        for (int substringSize = 1; substringSize <= currentIDString.Length / 2; ++substringSize)
+        {
+            // For the substring size, string length must be a multiple of the substring size
+            if (currentIDString.Length % substringSize != 0)
+            {
+                continue;
+            }
+
+            // For the substring size, each substring in that length stride must be the same
+            int currentCheckIndex = substringSize;
+            string referenceSubstring = currentIDString.Substring(0, substringSize);
+            while (currentCheckIndex < currentIDString.Length)
+            {
+                string nextSubstringInStride = currentIDString.Substring(currentCheckIndex, substringSize);
+                if (!nextSubstringInStride.Equals(referenceSubstring))
+                {
+                    break;
+                }
+                currentCheckIndex += substringSize;
+            }
+            // If we reached the end of the string, it is an invalid ID pattern
+            if (currentCheckIndex == currentIDString.Length)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public long SumInvalidIDs(ArrayList invalidIDs)
     {
         long sum = 0;
@@ -87,7 +118,24 @@ public class Day2
             }
             
             long sum = SumInvalidIDs(invalidIds);
-            Console.WriteLine(sum);
+            Console.WriteLine($"Part 1: {sum}");
+        }
+    }
+    
+    public void Part2()
+    {
+        var lines = InputReader.GetInputLines("Inputs/Day2Part1input.txt");
+        foreach (string line in lines)
+        {
+            var ranges = ParseRanges(line);
+            ArrayList invalidIds = new ArrayList();
+            foreach (RangeTuple range in ranges)
+            {
+                invalidIds.AddRange(GetInvalidIDsForRangePart2(range));
+            }
+            
+            long sum = SumInvalidIDs(invalidIds);
+            Console.WriteLine($"Part 2: {sum}");
         }
     }
 }
