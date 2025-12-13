@@ -11,3 +11,8 @@ Day1 day1 = new Day1();
 Day2 day2 = new Day2();
 day2.Part1();
 day2.Part2();
+
+Console.WriteLine("\n\nDay 3");
+Day3 day3 = new Day3();
+day3.Part1();
+day3.Part2();
