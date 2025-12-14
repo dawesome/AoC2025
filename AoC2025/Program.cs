@@ -24,4 +24,7 @@ Console.WriteLine($"Part 1 took {elapsed.TotalMilliseconds} ms");
 elapsed = Timing.Time(() => day4.Part2());
 Console.WriteLine($"Part 2 took {elapsed.TotalMilliseconds} ms");
 
-
+Console.WriteLine("\n\nDay 5");
+Day5 day5 = new Day5();
+day5.Part1();
+day5.Part2();
