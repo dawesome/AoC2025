@@ -33,3 +33,9 @@ Console.WriteLine("\n\nDay 6");
 Day6 day6 = new Day6();
 day6.Part1();
 day6.Part2();
+
+Console.WriteLine("\n\nDay 7");
+Day7 day7 = new Day7();
+day7.Part1();
+day7.Part2();
+
