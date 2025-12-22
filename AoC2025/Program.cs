@@ -39,3 +39,8 @@ Day7 day7 = new Day7();
 day7.Part1();
 day7.Part2();
 
+Console.WriteLine("\n\nDay 8");
+Day8 day8 = new Day8();
+day8.Part1();
+day8.Part2();
+
