@@ -120,4 +120,18 @@ public class Day8Tests
         List<List<int>> circuits = day8.ConnectClosestJunctions(10, true);
         Assert.That(day8.MultiplyLarestCircuits(circuits, 3), Is.EqualTo(40));
     }
+
+    [Test]
+    public void TestMultiplyLastCircutsXCoords()
+    {
+        var lines = InputReader.GetInputLines(@"../../../Inputs/Day8TestInput.txt");
+        Day8 day8 = new Day8();
+        day8.ParseLines(lines);
+        day8.CalculateDistancesBetweenJunctionBoxes();
+        
+        JunctionPair lastConnection = day8.ConnectClosestJunctionsUntilSingleCircut();
+        long product = (long)day8.JunctionBoxes[lastConnection.ClosestJunctionIndex].x *
+                       (long)day8.JunctionBoxes[lastConnection.ReferenceJunctionIndex].x;;
+        Assert.That(product, Is.EqualTo(25272));
+    }
 }

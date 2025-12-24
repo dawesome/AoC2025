@@ -189,6 +189,32 @@ public class Day8
         return circuits;
     }
 
+    // Keeps connecting until there is only one circuit. Returns the last connection made.
+    public JunctionPair ConnectClosestJunctionsUntilSingleCircut()
+    {
+        List<List<int>> circuits = new List<List<int>>();
+        
+        // Start with every junction box in its own circut
+        for (int index = 0; index < JunctionBoxes.Length; index++)
+        {
+            circuits.Add(new List<int> { index });
+        }
+        
+        int junctionDistanceIndex = 0;
+        while (circuits.Count > 1)
+        {
+            JunctionPair junctionPair = JunctionDistanceList[junctionDistanceIndex];
+            ConnectJunctionPairInCicuits(circuits, junctionPair, false);
+            ++junctionDistanceIndex;
+            // if (junctionDistanceIndex % 100 == 0)
+            // {
+            //     Console.WriteLine("Largest circuit is " + circuits.Max(c => c.Count));
+            // }
+        }
+        
+        return JunctionDistanceList[--junctionDistanceIndex];
+    }
+
     public void ConnectJunctionPairInCicuits(List<List<int>> circuits, JunctionPair junctionPair, bool printCircuits)
     {
         int circuitIndex = 0;
@@ -264,5 +290,11 @@ public class Day8
     {
         var lines = InputReader.GetInputLines("Inputs/Day8Input.txt");
         ParseLines(lines);
+        CalculateDistancesBetweenJunctionBoxes();
+        JunctionPair lastConnection = ConnectClosestJunctionsUntilSingleCircut();
+        Console.WriteLine("Last connection: " + lastConnection.ReferenceJunctionIndex + " -> " + lastConnection.ClosestJunctionIndex);
+        double multiple = JunctionBoxes[lastConnection.ClosestJunctionIndex].x *
+                          JunctionBoxes[lastConnection.ReferenceJunctionIndex].x;
+        Console.WriteLine("Last connection multiple = " + multiple);
     }
 }
