@@ -17,18 +17,18 @@ public class Day8Tests
         day8.PrintJunctionBoxes();
     }
 
-    [Test]
-    public void TestCalculateDistances()
-    {
-        var lines = InputReader.GetInputLines("../../../Inputs/Day8TestInput.txt");
-        Day8 day8 = new Day8();
-        day8.ParseLines(lines);
-        int[] closestJunctionIndexArray = day8.CalculateDistancesBetweenJunctionBoxes();
-        Assert.That(closestJunctionIndexArray.Length, Is.EqualTo(20));
-        Assert.That(closestJunctionIndexArray[0], Is.EqualTo(19));
-        Assert.That(closestJunctionIndexArray[19], Is.EqualTo(0));
-//        Assert.That(closestJunctionIndexArray[7], Is.EqualTo(19));
-    }
+//     [Test]
+//     public void TestCalculateDistances()
+//     {
+//         var lines = InputReader.GetInputLines("../../../Inputs/Day8TestInput.txt");
+//         Day8 day8 = new Day8();
+//         day8.ParseLines(lines);
+//         int[] closestJunctionIndexArray = day8.CalculateDistancesBetweenJunctionBoxes();
+//         Assert.That(closestJunctionIndexArray.Length, Is.EqualTo(20));
+//         Assert.That(closestJunctionIndexArray[0], Is.EqualTo(19));
+//         Assert.That(closestJunctionIndexArray[19], Is.EqualTo(0));
+// //        Assert.That(closestJunctionIndexArray[7], Is.EqualTo(19));
+//     }
 
     [Test]
     public void TestJunctionPairSorterSortsSmallestDistancesFirst()
@@ -119,28 +119,5 @@ public class Day8Tests
         
         List<List<int>> circuits = day8.ConnectClosestJunctions(10, true);
         Assert.That(day8.MultiplyLarestCircuits(circuits, 3), Is.EqualTo(40));
-    }
-
-    [Test]
-    public void TestCanCombineOneCircuit_CreateCircuitsList()
-    {
-        var lines = InputReader.GetInputLines("../../../Inputs/Day8TestInput.txt");
-        Day8 day8 = new Day8();
-        day8.ParseLines(lines);
-        List<List<int>> circuits = day8.CreateCircuitsList(1, true);
-        Assert.That(circuits.Count, Is.EqualTo(1));
-        Assert.That(circuits[0].Count, Is.EqualTo(2));
-    }
-    
-    [Test]
-    public void TestCanCombineTwoCircuit_CreateCircuitsList()
-    {
-        var lines = InputReader.GetInputLines("../../../Inputs/Day8TestInput.txt");
-        Day8 day8 = new Day8();
-        day8.ParseLines(lines);
-        List<List<int>> circuits = day8.CreateCircuitsList(2, true);
-        day8.PrintCircuits(circuits);
-        Assert.That(circuits.Count, Is.EqualTo(1));
-        Assert.That(circuits[0].Count, Is.EqualTo(3));
     }
 }

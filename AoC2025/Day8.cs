@@ -168,39 +168,6 @@ public class Day8
         
         return ClosestJunctionIndexArray;
     }
-    
-    public JunctionPair FindClosestPair(List<int> junctionBoxIndices)
-    {
-        // TODO: The thing that's wrong here is that I need to take out DIRECTLY CONNECTED pairs when considering distance.
-        // So, if 0/19 are a directly connected pair (they have each other as closest?), then no
-        //   other boxes should consider them as closest -- other boxes are looking for their closest pair?
-        // 
-
-        JunctionPair closestPair = new();
-        closestPair.DistanceFromReferenceToClosestJunction = double.MaxValue;
-
-        foreach (int outerJunctionBoxIndex in junctionBoxIndices)
-        {
-            foreach (int innerJunctionBoxIndex in junctionBoxIndices)
-            {
-                if (outerJunctionBoxIndex == innerJunctionBoxIndex)
-                {
-                    continue;
-                }
-                JunctionBox outerBox = JunctionBoxes[outerJunctionBoxIndex];
-                JunctionBox innerBox = JunctionBoxes[innerJunctionBoxIndex];
-                double distance = outerBox.Distance(innerBox);
-                if (distance < closestPair.DistanceFromReferenceToClosestJunction)
-                {
-                    closestPair.DistanceFromReferenceToClosestJunction = distance;
-                    closestPair.ReferenceJunctionIndex = outerJunctionBoxIndex;
-                    closestPair.ClosestJunctionIndex   = innerJunctionBoxIndex;
-                }
-            }
-        }
-        
-        return closestPair;
-    }
 
     public List<List<int>> ConnectClosestJunctions(long iterations, bool printCircuits = false)
     {
@@ -243,9 +210,7 @@ public class Day8
 
         if (junctionToCircuitPair.Item1 != -1 && (junctionToCircuitPair.Item1 == junctionToCircuitPair.Item2))
         {
-            // These junctions are already connected
-            //--iterations;
-            throw new Exception("Tried to connect already connected junctions");
+            // These junctions are already connected! Easy!
         }
             
         else if (junctionToCircuitPair.Item1 == -1 || junctionToCircuitPair.Item2 == -1)
@@ -272,28 +237,6 @@ public class Day8
             }
         }
     }
-
-    public List<List<int>> CreateCircuitsList(long iterations, bool printCircuits = false)
-    {
-        // Maybe the next algorithm is really:
-        //  1. Start with an EMPTY circuit list
-        //  2. Find the closest distance pair. Connect them. Remove them from consideration for finding a closest pair.
-        //      (but they could still the the closest box to another unconnected box)
-        //  3. For every unconnected box, find the closest distance pair.
-        List<List<int>> circuits = new List<List<int>>();
-        List<int> validJunctionIndices = Enumerable.Range(0, JunctionBoxes.Length).ToList(); 
-        
-        while (iterations > 0)
-        {
-            JunctionPair closestPair = FindClosestPair(validJunctionIndices);
-            ConnectJunctionPairInCicuits(circuits, closestPair, printCircuits);
-            // validJunctionIndices.Remove(closestPair.ReferenceJunctionIndex);
-            // validJunctionIndices.Remove(closestPair.ClosestJunctionIndex);
-            --iterations;
-        }
-
-        return circuits;
-    }
     
     public long MultiplyLarestCircuits(List<List<int>> circuits, int numberOfCircuitsToMultiply)
     {
@@ -310,6 +253,11 @@ public class Day8
     {
         var lines = InputReader.GetInputLines("Inputs/Day8Input.txt");
         ParseLines(lines);
+        CalculateDistancesBetweenJunctionBoxes();
+        List<List<int>> circuits = ConnectClosestJunctions(1000);
+        long multiple = MultiplyLarestCircuits(circuits, 3);
+        Console.WriteLine("Three largest circuits multiplied = " + multiple);
+        
     }
     
     public void Part2()
